@@ -3,23 +3,30 @@
 
 Download this repo and install the gems from the Gemfile.
 
-```
-git clone git://github.com/hh/windows-fromscratch.git
-cd windows-fromscratch
-bundle install
-bundle exec bash
-```
+    git clone git://github.com/hh/windows-fromscratch.git
+    cd windows-fromscratch
+    bundle install
 
 Now generate a new windows 2008R2 box from scratch.
 
-```
-veewee vbox build windows-2008R2-serverstandard-amd64-winrm
-veewee vbox validate windows-2008R2-serverstandard-amd64-winrm
-vagrant basebox export windows-2008R2-serverstandard-amd64-winrm
-vagrant up
-```
+    # vagrant box remove windows-2008R2-serverstandard-amd64-winrm
+    veewee vbox build windows-2008R2-serverstandard-amd64-winrm
+    veewee vbox validate windows-2008R2-serverstandard-amd64-winrm
+    vagrant basebox export windows-2008R2-serverstandard-amd64-winrm
+    vagrant up
 
 
+
+## Ruby and RVM
+
+    rvm install 1.9.2
+    gem install bundler
+
+    # if you want to empty the gemset...
+    rvm gemset empty vagrantwin
+
+
+Use .rvmrc to use ruby 1.9.2@vagrantwin
 
 ## veewee vbox build windows-2008R2-serverstandard-amd64-winrm
 
