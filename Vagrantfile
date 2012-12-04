@@ -12,19 +12,18 @@ Vagrant::Config.run do |config|
   config.vm.boot_mode = :gui
   config.vm.forward_port 3389, 3390, :name => "rdp", :auto => true
   config.vm.forward_port 5985, 5985, :name => "winrm", :auto => true
-  config.vm.customize ["modifyvm", :id, "--memory", 1024]
+  config.vm.customize ["modifyvm", :id, "--memory", 2048]
+  config.vm.customize ["modifyvm", :id, "--cpuexecutioncap", 80]
   config.vm.customize ["modifyvm", :id, "--vram", 48] # I have a big screen
-  config.vm.customize ["modifyvm", :id, "--cpus", 4] # I have an 8 way
+  config.vm.customize ["modifyvm", :id, "--cpus", 4] # I have a 4 way
   config.vm.provision :chef_solo do |chef|
-    # chef.cookbooks_path =  ["cookbooks", "opscodecookbooks"]
-    chef.cookbooks_path = "cookbooks"
+    chef.cookbooks_path =  ["cookbooks", "opscodecookbooks"]
     chef.json.merge!({:mykey =>"myvalue"})
-    # chef.json = {}
     chef.add_recipe("windows::reboot_handler")
-    # chef.add_recipe("windows-fromscratch::_annoyances")
-    # chef.add_recipe("windows-fromscratch::sysinternals")
-    # chef.add_recipe("windows-fromscratch::bginfo")
-    chef.add_recipe("windows-fromscratch::forcereboot")
+    chef.add_recipe("windows-fromscratch::_annoyances")
+    chef.add_recipe("windows-fromscratch::sysinternals")
+    chef.add_recipe("windows-fromscratch::bginfo")
+    # chef.add_recipe("windows-fromscratch::forcereboot")
   end # unless true
 
 end
