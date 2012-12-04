@@ -6,3 +6,5 @@ These are meant to be managed with `knife`:
     # -B, --branch BRANCH
 
     knife cookbook site install sql_server
+    # or
+    knife cookbook site install sql_server -o opscodecookbooks
