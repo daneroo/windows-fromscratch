@@ -20,17 +20,14 @@ Now generate a new windows 2008R2 box from scratch.
     # this will use the basebox we just built
     vagrant up
 
+## sqlexpress
+
+http://derek858.blogspot.ca/2010/07/unattended-sql-2008-r2-scripts.html
 
 ## winrm ??
 need to add chef to gemset, aand alias ?
 
     knife winrm -m 127.0.0.1 -P 5986 -x vagrant -P vagrant COMMAND
-
-# TODO
-
-* cleanup 1.9.2@global (veewee is there ..)
-* why are we using specific versions (git) of veewee, en-winrm
-* split up the veewee basebox (use main distro), and vagrant stuff
 
 ## Ruby and RVM
 
@@ -45,3 +42,9 @@ need to add chef to gemset, aand alias ?
 
 
 Use .rvmrc to use ruby 1.9.2@vagrantwin
+
+# TODO
+
+* cleanup 1.9.2@global (veewee is there ..)
+* why are we using specific versions (git) of veewee, en-winrm
+* split up the veewee basebox (use main distro), and vagrant stuff

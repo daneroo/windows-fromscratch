@@ -16,11 +16,15 @@ Vagrant::Config.run do |config|
   config.vm.customize ["modifyvm", :id, "--vram", 48] # I have a big screen
   config.vm.customize ["modifyvm", :id, "--cpus", 4] # I have an 8 way
   config.vm.provision :chef_solo do |chef|
+    # chef.cookbooks_path =  ["cookbooks", "opscodecookbooks"]
     chef.cookbooks_path = "cookbooks"
+    # chef.json.merge!({:mykey =>"myvalue"})
     chef.json = {}
+    chef.add_recipe("windows::reboot_handler")
+    # chef.add_recipe("windows-fromscratch::forcereboot")
     chef.add_recipe("windows-fromscratch::_annoyances")
     chef.add_recipe("windows-fromscratch::sysinternals")
     chef.add_recipe("windows-fromscratch::bginfo")
-  end
+  end # unless true
 
 end
