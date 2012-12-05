@@ -52,8 +52,8 @@
                     <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
-                <FullName>--</FullName>
-                <Organization>--</Organization>
+                <FullName>Vagrant Fullname</FullName>
+                <Organization>Vagrant Inc</Organization>
             </UserData>
         </component>
         <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -73,49 +73,137 @@
             </VisualEffects>
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
+                <!-- <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE> -->
                 <ProtectYourPC>3</ProtectYourPC>
                 <NetworkLocation>Work</NetworkLocation>
             </OOBE>
             <UserAccounts>
                 <AdministratorPassword>
-                    <Value>UABhAHMAcwB3AG8AcgBkAF8AMQAyADMAIQAhACEAIQAhAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA==</Value>
-                    <PlainText>false</PlainText>
+                    <Value>vagrant</Value>
+                    <PlainText>true</PlainText>
                 </AdministratorPassword>
                 <LocalAccounts>
                     <LocalAccount wcm:action="add">
                         <Password>
-                            <Value>UABhAHMAcwB3AG8AcgBkAF8AMQAyADMAIQAhACEAIQAhAFAAYQBzAHMAdwBvAHIAZAA=</Value>
-                            <PlainText>false</PlainText>
+                            <Value>vagrant</Value>
+                            <PlainText>true</PlainText>
                         </Password>
-                        <Description>Local Administrator</Description>
-                        <DisplayName>Administrator</DisplayName>
-                        <Group>Administrators</Group>
-                        <Name>Administrator</Name>
+                        <Description>Vagrant User</Description>
+                        <DisplayName>vagrant</DisplayName>
+                        <Group>administrators</Group>
+                        <Name>vagrant</Name>
                     </LocalAccount>
                 </LocalAccounts>
             </UserAccounts>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm quickconfig -q</CommandLine>
+                    <Description>winrm quickconfig -q</Description>
                     <Order>1</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm quickconfig -transport:http</CommandLine>
+                    <Description>winrm quickconfig -transport:http</Description>
+                    <Order>2</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config @{MaxTimeoutms="1800000"}</CommandLine>
+                    <Description>Win RM MaxTimoutms</Description>
+                    <Order>3</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/winrs @{MaxMemoryPerShellMB="300"}</CommandLine>
+                    <Description>Win RM MaxMemoryPerShellMB</Description>
+                    <Order>4</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/service @{AllowUnencrypted="true"}</CommandLine>
+                    <Description>Win RM AllowUnencrypted</Description>
+                    <Order>5</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/service/auth @{Basic="true"}</CommandLine>
+                    <Description>Win RM auth Basic</Description>
+                    <Order>6</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/listener?Address=*+Transport=HTTP @{Port="5985"} </CommandLine>
+                    <Description>Win RM listener Address/Port</Description>
+                    <Order>7</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c netsh advfirewall firewall set rule group="remote administration" new enable=yes </CommandLine>
+                    <Description>Win RM adv firewall enable</Description>
+                    <Order>8</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c netsh advfirewall firewall add portopening TCP 5985 "Port 5985" </CommandLine>
+                    <Description>Win RM port open</Description>
+                    <Order>9</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c net stop winrm </CommandLine>
+                    <Description>Stop Win RM Service </Description>
+                    <Order>10</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c sc config winrm start= auto</CommandLine>
+                    <Description>Win RM Autostart</Description>
+                    <Order>11</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+
+                <!-- DL: I added this -->
+                <SynchronousCommand wcm:action="add">
+                    <Order>12</Order>
+                    <CommandLine>cmd.exe /c net user vagrant /active:yes</CommandLine>
+                    <Description>enable remote vagrant</Description>
+                </SynchronousCommand>
+
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c net start winrm </CommandLine>
+                    <Description>Start Win RM Service</Description>
+                    <Order>13</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
+                    <Description>Start Win RM Service</Description>
+                    <Order>14</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+
+                <!-- These were in derek's example -->
+<!--                 <SynchronousCommand wcm:action="add">
+                    <Order>15</Order>
                     <Description>Basic configuration</Description>
                     <CommandLine>cmd.exe /c powershell.exe &quot;c:\Windows\setup\scripts\unattend_config.ps1&quot; &gt; c:\Windows\setup\scripts\unattend_config.log</CommandLine>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>2</Order>
+                    <Order>16</Order>
                     <Description>Install Software</Description>
                     <RequiresUserInput>false</RequiresUserInput>
                     <CommandLine>cmd.exe /c c:\windows\setup\scripts\unattend_software.cmd</CommandLine>
                 </SynchronousCommand>
-            </FirstLogonCommands>
+ -->            </FirstLogonCommands>
             <AutoLogon>
                 <Password>
-                    <Value>UABhAHMAcwB3AG8AcgBkAF8AMQAyADMAIQAhACEAIQAhAFAAYQBzAHMAdwBvAHIAZAA=</Value>
-                    <PlainText>false</PlainText>
+                    <Value>vagrant</Value>
+                    <PlainText>true</PlainText>
                 </Password>
+                <Username>vagrant</Username>
                 <Enabled>true</Enabled>
-                <LogonCount>2</LogonCount>
-                <Username>administrator</Username>
             </AutoLogon>
             <RegisteredOrganization>--</RegisteredOrganization>
             <RegisteredOwner>--</RegisteredOwner>
@@ -142,6 +230,7 @@
         </component>
         <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <RunSynchronous>
+<!-- These were in derek's example
                 <RunSynchronousCommand wcm:action="add">
                     <Order>1</Order>
                     <Path>cmd /c reg add &quot;HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell&quot; /v ExecutionPolicy /t REG_SZ /d RemoteSigned /f</Path>
@@ -157,11 +246,12 @@
                     <Description>Open RDS firewall port</Description>
                     <Path>netsh advfirewall firewall set rule name=&quot;Remote Desktop (TCP-In)&quot; new enable=yes</Path>
                 </RunSynchronousCommand>
+ -->
             </RunSynchronous>
         </component>
         <component name="Microsoft-Windows-SQMApi" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="NonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <CEIPEnabled>0</CEIPEnabled>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:e:/ws2012install.wim#Windows Server 2012 SERVERSTANDARD" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+    <!-- <cpi:offlineImage cpi:source="wim:e:/ws2012install.wim#Windows Server 2012 SERVERSTANDARD" xmlns:cpi="urn:schemas-microsoft-com:cpi" /> -->
 </unattend>
