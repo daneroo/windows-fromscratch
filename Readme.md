@@ -9,6 +9,13 @@ Download this repo and install the gems from the Gemfile.
 
 Now generate a new windows 2008R2 box from scratch.
 
+    # vagrant box remove windows-2012
+    veewee vbox build windows-2012
+    veewee vbox validate windows-2012
+    vagrant basebox export windows-2012
+
+Now generate a new windows 2008R2 box from scratch.
+
     # vagrant box remove windows-2008R2-serverstandard-amd64-winrm
     veewee vbox build windows-2008R2-serverstandard-amd64-winrm
     veewee vbox validate windows-2008R2-serverstandard-amd64-winrm
@@ -47,4 +54,5 @@ Use .rvmrc to use ruby 1.9.2@vagrantwin
 
 * cleanup 1.9.2@global (veewee is there ..)
 * why are we using specific versions (git) of veewee, en-winrm
+* why do opscode recipes not work like hh's : _annoyances -> windows?
 * split up the veewee basebox (use main distro), and vagrant stuff

@@ -17,12 +17,22 @@ Vagrant::Config.run do |config|
   config.vm.customize ["modifyvm", :id, "--vram", 48] # I have a big screen
   config.vm.customize ["modifyvm", :id, "--cpus", 4] # I have a 4 way
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path =  ["cookbooks", "opscodecookbooks"]
-    chef.json.merge!({:mykey =>"myvalue"})
+    # chef.cookbooks_path =  ["cookbooks", "opscodecookbooks"]
+    chef.cookbooks_path =  ["cookbooks", "hhcookbooks"]
+    # chef.json.merge!({:mykey =>"myvalue"})
+    chef.json.merge!({:sql_server => {
+      :accept_eula => true,
+      :server_sa_password => 's0l0DB$',
+      :instance_name => 'SOLOCHAIN'
+    }})
     chef.add_recipe("windows::reboot_handler")
     chef.add_recipe("windows-fromscratch::_annoyances")
     chef.add_recipe("windows-fromscratch::sysinternals")
     chef.add_recipe("windows-fromscratch::bginfo")
+
+    chef.add_recipe("windows-fromscratch::packages")
+
+    # chef.add_recipe("sql_server::server")
     # chef.add_recipe("windows-fromscratch::forcereboot")
   end # unless true
 

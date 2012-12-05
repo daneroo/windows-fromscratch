@@ -4,7 +4,7 @@
 # we want to do this on first boot only...
 Chef::Log.info('Will force reboot')
 
-windows_reboot 60 do
+windows_reboot 30 do
   reason 'cause chef said so'
   action :request
 end
