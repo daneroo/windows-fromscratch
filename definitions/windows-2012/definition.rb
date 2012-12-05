@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 Veewee::Session.declare({
-    :os_type_id => 'Windows2012_64',
+    # one of `vagrant basebox ostypes`
+    # what it should be... :os_type_id => 'Windows2012_64',
+    # what it might be... :os_type_id => 'Windows8_64',
+    # what it was in 2008... :os_type_id => 'Windows2008_64',
+    :os_type_id => 'Windows8_64',
     # http://technet.microsoft.com/en-us/evalcenter/dd459137.aspx
     # Download and install full featured software for 180-day trial
     :iso_file => "9200.16384.WIN8_RTM.120725-1247_X64FRE_SERVER_EVAL_EN-US-HRM_SSS_X64FREE_EN-US_DV5.ISO",
