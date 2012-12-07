@@ -12,10 +12,18 @@ Vagrant::Config.run do |config|
   config.vm.boot_mode = :gui
   config.vm.forward_port 3389, 3390, :name => "rdp", :auto => true
   config.vm.forward_port 5985, 5985, :name => "winrm", :auto => true
+  config.vm.forward_port 1433, 1433, :name => "mssql", :auto => true
   config.vm.customize ["modifyvm", :id, "--memory", 2048]
   config.vm.customize ["modifyvm", :id, "--cpuexecutioncap", 80]
   config.vm.customize ["modifyvm", :id, "--vram", 48] # I have a big screen
   config.vm.customize ["modifyvm", :id, "--cpus", 4] # I have a 4 way
+
+  # network
+  # config.vm.network :hostonly, "192.168.20.10"
+  # config.vm.network :bridged
+  # config.vm.network :bridged, { bridge: 'en0: Ethernet' }
+
+
   config.vm.provision :chef_solo do |chef|
     # chef.cookbooks_path =  ["cookbooks", "opscodecookbooks"]
     chef.cookbooks_path =  ["cookbooks", "hhcookbooks"]
@@ -31,9 +39,11 @@ Vagrant::Config.run do |config|
     chef.add_recipe("windows-fromscratch::bginfo")
 
     chef.add_recipe("windows-fromscratch::packages")
-
-    # chef.add_recipe("sql_server::server")
     # chef.add_recipe("windows-fromscratch::forcereboot")
+
+    chef.add_recipe("windows-fromscratch::sql_server_install")
+    # sql_server from opscode does not work from winrm
+    # chef.add_recipe("sql_server::server")
   end # unless true
 
 end

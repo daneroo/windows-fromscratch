@@ -1,5 +1,6 @@
 # Opscode recipes
 
+Candidates are sql_express, powershell, (windows, chef_handler)
 These are meant to be managed with `knife`:
 
     # -o, --cookbook-path PATH (we use ../.chef/knife.rb to set default cookbook path)
