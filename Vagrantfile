@@ -43,7 +43,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe("windows-fromscratch::packages")
     # chef.add_recipe("windows-fromscratch::forcereboot")
 
-    #chef.add_recipe("windows-fromscratch::sql_server_install")
+    chef.add_recipe("windows-fromscratch::sql_server_install")
     # sql_server from opscode does not work from winrm
     # chef.add_recipe("sql_server::server")
   end # unless true

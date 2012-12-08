@@ -25,6 +25,7 @@ remote_file "SQLEXPR_x64_ENU.exe" do
   source 'http://care.dlservice.microsoft.com/dl/download/5/1/A/51A153F6-6B08-4F94-A7B2-BA1AD482BC75/SQLEXPR_x64_ENU.exe'
   checksum '6840255cf493927a3f5e1d7f865b8409ed89133e3657a609da229bab4005b613'
   action :create_if_missing
+  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
 end
 
 
