@@ -7,12 +7,6 @@ Download this repo and install the gems from the Gemfile.
     cd windows-fromscratch
     bundle install
 
-Now generate a new windows 2008R2 box from scratch.
-
-    # vagrant box remove windows-2012
-    veewee vbox build windows-2012
-    veewee vbox validate windows-2012
-    vagrant basebox export windows-2012
 
 Now generate a new windows 2008R2 box from scratch.
 
@@ -27,9 +21,26 @@ Now generate a new windows 2008R2 box from scratch.
     # this will use the basebox we just built
     vagrant up
 
-## sqlexpress
+Now generate a new windows 2008R2 box w/SQLEXPRESS.
 
-http://derek858.blogspot.ca/2010/07/unattended-sql-2008-r2-scripts.html
+    # vagrant box remove windows-2008R2-SQLEXPRESS-winrm
+    veewee vbox build windows-2008R2-SQLEXPRESS-winrm
+    veewee vbox validate windows-2008R2-SQLEXPRESS-winrm
+    vagrant basebox export windows-2008R2-SQLEXPRESS-winrm
+
+    # optionally install (force) the new box
+    vagrant box add -f windows-2008R2-SQLEXPRESS-winrm ./windows-2008R2-SQLEXPRESS-winrm.box
+
+    # this will use the basebox we just built
+    vagrant up
+
+Now generate a new windows 2012 box from scratch. (not done yet)
+
+    # vagrant box remove windows-2012
+    veewee vbox build windows-2012
+    veewee vbox validate windows-2012
+    vagrant basebox export windows-2012
+
 
 ## winrm ??
 need to add chef to gemset, aand alias ?

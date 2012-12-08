@@ -6,8 +6,10 @@ Vagrant::Config.run do |config|
   config.winrm.timeout = 1800     #Set WinRM Timeout in seconds (Default 30)
 
   # Configure base box parameters
-  config.vm.box = "windows-2008R2-serverstandard-amd64-winrm"
-  config.vm.box_url = "./windows-2008R2-serverstandard-amd64-winrm.box"
+  # config.vm.box = "windows-2008R2-serverstandard-amd64-winrm"
+  # config.vm.box_url = "./windows-2008R2-serverstandard-amd64-winrm.box"
+  config.vm.box = "windows-2008R2-SQLEXPRESS-winrm"
+  config.vm.box_url = "./windows-2008R2-SQLEXPRESS-winrm.box"
   config.vm.guest = :windows
   config.vm.boot_mode = :gui
   config.vm.forward_port 3389, 3390, :name => "rdp", :auto => true
@@ -41,7 +43,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe("windows-fromscratch::packages")
     # chef.add_recipe("windows-fromscratch::forcereboot")
 
-    chef.add_recipe("windows-fromscratch::sql_server_install")
+    #chef.add_recipe("windows-fromscratch::sql_server_install")
     # sql_server from opscode does not work from winrm
     # chef.add_recipe("sql_server::server")
   end # unless true

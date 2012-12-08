@@ -29,12 +29,11 @@ end
 
 
 # schtasks /Change /tn "sqlexpr_install" /Disable
-# schtasks /Delete /tn "sqlexpr_install"
+# schtasks /Delete /tn "sqlexpr_install" /f
 windows_batch "sql installer task" do
   code <<-EOH
   schtasks /Create /tn "sqlexpr_install" /tr "c:\\SQLEXPR_x64_ENU.exe /q /HIDECONSOLE /ConfigurationFile=c:\\vagrant\\ConfigurationFile.ini" /sc once /st 00:01 /sd 05/16/2020 /f /rl HIGHEST
   schtasks /Run /tn "sqlexpr_install"
-  schtasks /Delete /tn "sqlexpr_install"
   EOH
   not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
 end
@@ -47,24 +46,35 @@ windows_batch "wait for install to finish" do
   EOH
 end
 
-service_name = "MSSQL$#{node['sql_server']['instance_name']}"
+# Could remove the task now...
+windows_batch "remove sql installer task" do
+  code <<-EOH
+  schtasks /Delete /tn "sqlexpr_install" /f
+  EOH
+  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
+end
 
+service_name = "MSSQL$#{node['sql_server']['instance_name']}"
 service service_name do
   action :nothing
 end
 
+# guard for idempotence ? 
 windows_batch "open sql port" do
   code <<-EOH
   netsh advfirewall firewall add rule name="MSSQL 1433" dir=in action=allow protocol=TCP localport=1433
   EOH
 end
 
-# set the static tcp port
+# set the static tcp port (if necessary)
+key_name = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL10_50.' << node['sql_server']['instance_name'] << '\MSSQLServer\SuperSocketNetLib\Tcp\IPAll'
+port_s = node['sql_server']['port'].to_s
 windows_registry "set-static-tcp-port"  do
-  key_name 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL10_50.' << node['sql_server']['instance_name'] << '\MSSQLServer\SuperSocketNetLib\Tcp\IPAll'
-  values 'TcpPort' => node['sql_server']['port'].to_s, 'TcpDynamicPorts' => ""
+  key_name key_name
+  values 'TcpPort' => port_s, 'TcpDynamicPorts' => ""
   action :force_modify
   notifies :restart, "service[#{service_name}]", :immediately
+  not_if { port_s == Registry.get_value(key_name,'TcpPort') }
 end
 
 
