@@ -1,5 +1,13 @@
 # Windows from scratch
 
+## TODO: sql express
+
+* try original Config.
+* merge in dim's settings
+* start the recipe from scratch in vagrant sas
+* install tiny_tds and restore database... (if not exists)
+* use annoyances,bginfo,...
+
 
 Download this repo and install the gems from the Gemfile.
 

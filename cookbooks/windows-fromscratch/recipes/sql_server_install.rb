@@ -19,6 +19,13 @@ windows_package "Microsoft SQL Server 2008 R2 (64-bit)" do
   action :nothing
 end
 
+# fetch Microsoft SQL Server 2008 R2 With Tools (64-bit)
+remote_file "SQLEXPRWT_x64_ENU.exe" do
+  source 'http://download.microsoft.com/download/5/5/8/558522E0-2150-47E2-8F52-FF4D9C3645DF/SQLEXPRWT_x64_ENU.exe'
+  checksum 'c2210394515a96dba37b88ea3b1e87659aa5984026ab97d0eaa63e7ae42f6f1b'
+  action :create_if_missing
+  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
+end
 
 # fetch Microsoft SQL Server 2008 R2 (64-bit)
 remote_file "SQLEXPR_x64_ENU.exe" do
@@ -26,18 +33,26 @@ remote_file "SQLEXPR_x64_ENU.exe" do
   checksum '6840255cf493927a3f5e1d7f865b8409ed89133e3657a609da229bab4005b613'
   action :create_if_missing
   not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
+end unless true
+
+
+# installer w/tools
+windows_batch "sql installer task" do
+  code <<-EOH
+  schtasks /Create /tn "sqlexpr_install" /tr "c:\\SQLEXPRWT_x64_ENU.exe /q /HIDECONSOLE /ConfigurationFile=c:\\vagrant\\ConfigurationFileWTools.ini" /sc once /st 00:01 /sd 05/16/2020 /f /rl HIGHEST
+  schtasks /Run /tn "sqlexpr_install"
+  EOH
+  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
 end
 
-
-# schtasks /Change /tn "sqlexpr_install" /Disable
-# schtasks /Delete /tn "sqlexpr_install" /f
+#install no-tools
 windows_batch "sql installer task" do
   code <<-EOH
   schtasks /Create /tn "sqlexpr_install" /tr "c:\\SQLEXPR_x64_ENU.exe /q /HIDECONSOLE /ConfigurationFile=c:\\vagrant\\ConfigurationFile.ini" /sc once /st 00:01 /sd 05/16/2020 /f /rl HIGHEST
   schtasks /Run /tn "sqlexpr_install"
   EOH
   not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
-end
+end unless true
 
 # max 15 minutes...
 windows_batch "wait for install to finish" do
@@ -47,7 +62,9 @@ windows_batch "wait for install to finish" do
   EOH
 end
 
-# Could remove the task now...
+# Can remove the task now...
+# Disabling the task makes it unexecutable...
+# schtasks /Change /tn "sqlexpr_install" /Disable
 windows_batch "remove sql installer task" do
   code <<-EOH
   schtasks /Delete /tn "sqlexpr_install" /f
@@ -77,5 +94,10 @@ windows_registry "set-static-tcp-port"  do
   notifies :restart, "service[#{service_name}]", :immediately
   not_if { port_s == Registry.get_value(key_name,'TcpPort') }
 end
+
+sql_server_database 'solochain' do
+  connection ({:host => "127.0.0.1", :port => node['sql_server']['port'], :username => 'sa', :password => node['sql_server']['server_sa_password']})
+  action :create
+end unless true
 
 
