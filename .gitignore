@@ -1,3 +1,5 @@
 .vagrant
 *.box
 virtualfloppy.vfd
+cache/*
+!cache/README.md

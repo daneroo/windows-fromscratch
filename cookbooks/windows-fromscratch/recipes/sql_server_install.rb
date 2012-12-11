@@ -8,51 +8,31 @@
 #   find a way to determine when the installation is done, then trigger a service restart
 #   net stop <svcname>; net start <svcname>
 
+cache_path = Chef::Config[:file_cache_path]
 
-# Microsoft SQL Server 2008 R2 (64-bit)
-# This does not work from winrm
-windows_package "Microsoft SQL Server 2008 R2 (64-bit)" do
+# fetch Microsoft SQL Server 2008 R2 (64-bit)
+remote_file win_friendly_path("#{cache_path}/SQLEXPR_x64_ENU.exe") do
   source 'http://care.dlservice.microsoft.com/dl/download/5/1/A/51A153F6-6B08-4F94-A7B2-BA1AD482BC75/SQLEXPR_x64_ENU.exe'
   checksum '6840255cf493927a3f5e1d7f865b8409ed89133e3657a609da229bab4005b613'
-  installer_type :custom
-  options "/q /ConfigurationFile=c:\\vagrant\\ConfigurationFile.ini"
-  action :nothing
+  action :create_if_missing
 end
 
 # fetch Microsoft SQL Server 2008 R2 With Tools (64-bit)
-remote_file "SQLEXPRWT_x64_ENU.exe" do
+remote_file  win_friendly_path("#{cache_path}/SQLEXPRWT_x64_ENU.exe") do
   source 'http://download.microsoft.com/download/5/5/8/558522E0-2150-47E2-8F52-FF4D9C3645DF/SQLEXPRWT_x64_ENU.exe'
   checksum 'c2210394515a96dba37b88ea3b1e87659aa5984026ab97d0eaa63e7ae42f6f1b'
   action :create_if_missing
-  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
 end
-
-# fetch Microsoft SQL Server 2008 R2 (64-bit)
-remote_file "SQLEXPR_x64_ENU.exe" do
-  source 'http://care.dlservice.microsoft.com/dl/download/5/1/A/51A153F6-6B08-4F94-A7B2-BA1AD482BC75/SQLEXPR_x64_ENU.exe'
-  checksum '6840255cf493927a3f5e1d7f865b8409ed89133e3657a609da229bab4005b613'
-  action :create_if_missing
-  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
-end unless true
-
 
 # installer w/tools
 windows_batch "sql installer task" do
   code <<-EOH
-  schtasks /Create /tn "sqlexpr_install" /tr "c:\\SQLEXPRWT_x64_ENU.exe /q /HIDECONSOLE /ConfigurationFile=c:\\vagrant\\ConfigurationFileWTools.ini" /sc once /st 00:01 /sd 05/16/2020 /f /rl HIGHEST
+  schtasks /Create /tn "sqlexpr_install" /tr "#{cache_path}\\SQLEXPRWT_x64_ENU.exe /q /HIDECONSOLE /ConfigurationFile=c:\\vagrant\\ConfigurationFileWTools.ini" /sc once /st 00:01 /sd 05/16/2020 /f /rl HIGHEST
   schtasks /Run /tn "sqlexpr_install"
   EOH
   not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
 end
 
-#install no-tools
-windows_batch "sql installer task" do
-  code <<-EOH
-  schtasks /Create /tn "sqlexpr_install" /tr "c:\\SQLEXPR_x64_ENU.exe /q /HIDECONSOLE /ConfigurationFile=c:\\vagrant\\ConfigurationFile.ini" /sc once /st 00:01 /sd 05/16/2020 /f /rl HIGHEST
-  schtasks /Run /tn "sqlexpr_install"
-  EOH
-  not_if { File.directory?('c:\\Program Files\\Microsoft SQL Server') }
-end unless true
 
 # max 15 minutes...
 windows_batch "wait for install to finish" do
@@ -94,10 +74,4 @@ windows_registry "set-static-tcp-port"  do
   notifies :restart, "service[#{service_name}]", :immediately
   not_if { port_s == Registry.get_value(key_name,'TcpPort') }
 end
-
-sql_server_database 'solochain' do
-  connection ({:host => "127.0.0.1", :port => node['sql_server']['port'], :username => 'sa', :password => node['sql_server']['server_sa_password']})
-  action :create
-end unless true
-
 

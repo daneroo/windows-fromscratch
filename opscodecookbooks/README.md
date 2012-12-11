@@ -1,5 +1,9 @@
 # Opscode recipes
 
+remember this: https://github.com/websterclay/knife-github-cookbooks
+
+and take a look at this: git://github.com/matschaffer/chef-loves-windows.git
+
 Candidates are sql_express, powershell, (windows, chef_handler)
 These are meant to be managed with `knife`:
 

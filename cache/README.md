@@ -1,0 +1,1 @@
+# Cache directory for downloadable files, and such
