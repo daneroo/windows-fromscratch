@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <servicing></servicing>
-
     <settings pass="windowsPE">
-
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
             <DiskConfiguration>
                 <Disk wcm:action="add">
-
                     <CreatePartitions>
                         <CreatePartition wcm:action="add">
                             <Order>1</Order>
@@ -16,7 +12,6 @@
                             <Size>20000</Size>
                         </CreatePartition>
                     </CreatePartitions>
-
                     <ModifyPartitions>
                         <ModifyPartition wcm:action="add">
                             <Extend>false</Extend>
@@ -27,25 +22,19 @@
                             <Label>Windows 2008R2</Label>
                         </ModifyPartition>
                     </ModifyPartitions>
-
                     <DiskID>0</DiskID>
                     <WillWipeDisk>true</WillWipeDisk>
-
                 </Disk>
                 <WillShowUI>OnError</WillShowUI>
             </DiskConfiguration>
-
             <UserData>
-              <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
+                <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
                 <ProductKey>YC6KT-GKW9T-YTKYR-T4X34-R7VHC
-                    <WillShowUI>Never</WillShowUI>
-                </ProductKey>
-
+                    <WillShowUI>Never</WillShowUI></ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <FullName>Vagrant Fullname</FullName>
                 <Organization>Vagrant Inc</Organization>
             </UserData>
-
             <ImageInstall>
                 <OSImage>
                     <InstallTo>
@@ -62,9 +51,7 @@
                     </InstallFrom>
                 </OSImage>
             </ImageInstall>
-
         </component>
-
         <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <SetupUILanguage>
                 <UILanguage>en-US</UILanguage>
@@ -76,8 +63,6 @@
             <UserLocale>en-US</UserLocale>
         </component>
     </settings>
-
-
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserAccounts>
@@ -207,22 +192,22 @@
         </component>
     </settings>
     <settings pass="specialize">
-     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" >
-        <OEMInformation>
-            <HelpCustomized>false</HelpCustomized>
-        </OEMInformation>                        
-        <!-- Rename computer here. -->
-        <ComputerName>vagrant-2008R2</ComputerName>
-        <TimeZone>Pacific Standard Time</TimeZone>
-        <RegisteredOwner></RegisteredOwner>
-    </component>
-    <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <SkipAutoActivation>true</SkipAutoActivation>
-    </component>
-    <!-- DL: added thi to turn off LUA -->
-    <component name="Microsoft-Windows-LUA-Settings" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <EnableLUA>false</EnableLUA>
-    </component>
-</settings>
-<cpi:offlineImage cpi:source="catalog:d:/sources/install_windows server 2008 r2 serverdatacenter.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <OEMInformation>
+                <HelpCustomized>false</HelpCustomized>
+            </OEMInformation>
+            <!-- Rename computer here. -->
+            <ComputerName>vagrant-2008R2</ComputerName>
+            <TimeZone>Pacific Standard Time</TimeZone>
+            <RegisteredOwner></RegisteredOwner>
+        </component>
+        <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SkipAutoActivation>true</SkipAutoActivation>
+        </component>
+        <!-- DL: added thi to turn off LUA -->
+        <component name="Microsoft-Windows-LUA-Settings" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <EnableLUA>false</EnableLUA>
+        </component>
+    </settings>
+    <cpi:offlineImage cpi:source="catalog:d:/sources/install_windows server 2008 r2 serverdatacenter.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
