@@ -1,19 +1,38 @@
 This basebox definition was modified to install SQLExpress
 * modify memory, cores
 * disable UAC (EnableLUA=false) -- in Autounattend.xml - not working ?
+
+    <!-- DL: Turn off LUA/UAC Still not working ?-->
+    <!-- 
+        <settings pass="offlineServicing">
+            <component name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <EnableLUA>false</EnableLUA>
+            </component>
+        </settings>
+     -->
+
 * disable lua/UAC with registry: 
+
+    You can invoke this with:
+    knife winrm -m 127.0.0.1 -P 5985 -x vagrant -P vagrant COMMAND
 
     REG QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA
     REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d "0" /f
 
-Disable Explorer Enhanced Security
+* Disable Explorer Enhanced Security Autounattend.xml/pass=specialize
 
     IEHardenAdmin = Off
     IEHardenUser = Off
 
-* add feature NetFx3 (is that required ?) using dism in install-sqlexpress.bat
+* Add feature NetFx3 (is that required ?) 
+    Using <servicing><package>...
+    Could also use `dism`: commented in install-sqlexpress.bat
 
     dism /online /enable-feature /featurename:NetFx3 /norestart
+
+* Disable opening of Server Manager at Logon.
+* Disable Initial Configuration Tasks at Logon
+* Shutdown Event Tracker, with REG ADD... in  Autounattend.xml/pass=oobeSystem/SynchronousCommand blocks
 
 You can download a free trial of Windows Server 2008 R2 with Service Pack 1 from two different locations manually:
 

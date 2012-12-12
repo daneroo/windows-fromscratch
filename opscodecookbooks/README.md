@@ -1,5 +1,9 @@
 # Opscode recipes
 
+This looks even better: Librarian-Chef:  
+http://blog.base2.io/2012/05/01/vagrants-and-chefs-and-librarians-oh-my/#.UMjRPpPjnBU  
+https://github.com/applicationsonline/librarian/blob/master/README.md
+
 remember this: https://github.com/websterclay/knife-github-cookbooks
 
 and take a look at this: git://github.com/matschaffer/chef-loves-windows.git

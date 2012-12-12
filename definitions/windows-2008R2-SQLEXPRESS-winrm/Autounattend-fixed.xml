@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <servicing>
+        <!-- DL: Added .NET Framework 3.5.1. -->
+        <package action="configure">
+            <assemblyIdentity name="Microsoft-Windows-Foundation-Package" version="6.1.7600.16385" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language=""/>
+            <selection name="NetFx3" state="true"/>
+        </package>
+    </servicing>
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DiskConfiguration>
+                <Disk wcm:action="add">
+                    <CreatePartitions>
+                        <CreatePartition wcm:action="add">
+                            <Order>1</Order>
+                            <Type>Primary</Type>
+                            <Size>20000</Size>
+                        </CreatePartition>
+                    </CreatePartitions>
+                    <ModifyPartitions>
+                        <ModifyPartition wcm:action="add">
+                            <Extend>false</Extend>
+                            <Format>NTFS</Format>
+                            <Letter>C</Letter>
+                            <Order>1</Order>
+                            <PartitionID>1</PartitionID>
+                            <Label>Windows 2008R2</Label>
+                        </ModifyPartition>
+                    </ModifyPartitions>
+                    <DiskID>0</DiskID>
+                    <WillWipeDisk>true</WillWipeDisk>
+                </Disk>
+                <WillShowUI>OnError</WillShowUI>
+            </DiskConfiguration>
+            <UserData>
+                <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
+                <ProductKey>YC6KT-GKW9T-YTKYR-T4X34-R7VHC
+                    <WillShowUI>Never</WillShowUI></ProductKey>
+                <AcceptEula>true</AcceptEula>
+                <FullName>Vagrant Fullname</FullName>
+                <Organization>Vagrant Inc</Organization>
+            </UserData>
+            <ImageInstall>
+                <OSImage>
+                    <InstallTo>
+                        <DiskID>0</DiskID>
+                        <PartitionID>1</PartitionID>
+                    </InstallTo>
+                    <WillShowUI>OnError</WillShowUI>
+                    <InstallToAvailablePartition>false</InstallToAvailablePartition>
+                    <InstallFrom>
+                        <MetaData wcm:action="add">
+                            <Key>/IMAGE/NAME</Key>
+                            <Value>Windows Server 2008 R2 SERVERSTANDARD</Value>
+                        </MetaData>
+                    </InstallFrom>
+                </OSImage>
+            </ImageInstall>
+        </component>
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SetupUILanguage>
+                <UILanguage>en-US</UILanguage>
+            </SetupUILanguage>
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserAccounts>
+                <AdministratorPassword>
+                    <Value>vagrant</Value>
+                    <PlainText>true</PlainText>
+                </AdministratorPassword>
+                <LocalAccounts>
+                    <LocalAccount wcm:action="add">
+                        <Password>
+                            <Value>vagrant</Value>
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Description>Vagrant User</Description>
+                        <DisplayName>vagrant</DisplayName>
+                        <Group>administrators</Group>
+                        <Name>vagrant</Name>
+                    </LocalAccount>
+                </LocalAccounts>
+            </UserAccounts>
+            <OOBE>
+                <HideEULAPage>true</HideEULAPage>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <NetworkLocation>Home</NetworkLocation>
+            </OOBE>
+            <AutoLogon>
+                <Password>
+                    <Value>vagrant</Value>
+                    <PlainText>true</PlainText>
+                </Password>
+                <Username>vagrant</Username>
+                <Enabled>true</Enabled>
+            </AutoLogon>
+            <FirstLogonCommands>
+                <!-- <SynchronousCommand wcm:action="add"> -->
+                <!--     <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine> -->
+                <!--     <Description>Install Cygwin SSH</Description> -->
+                <!--     <Order>1</Order> -->
+                <!--     <RequiresUserInput>true</RequiresUserInput> -->
+                <!-- </SynchronousCommand> -->
+                <!-- <SynchronousCommand wcm:action="add"> -->
+                <!--     <CommandLine>cmd.exe /c a:install-winrm.bat</CommandLine> -->
+                <!--     <Description>Install Win RM</Description> -->
+                <!--     <Order>2</Order> -->
+                <!--     <RequiresUserInput>true</RequiresUserInput> -->
+                <!-- </SynchronousCommand> -->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm quickconfig -q</CommandLine>
+                    <Description>winrm quickconfig -q</Description>
+                    <Order>1</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm quickconfig -transport:http</CommandLine>
+                    <Description>winrm quickconfig -transport:http</Description>
+                    <Order>2</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config @{MaxTimeoutms="1800000"}</CommandLine>
+                    <Description>Win RM MaxTimoutms</Description>
+                    <Order>3</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/winrs @{MaxMemoryPerShellMB="300"}</CommandLine>
+                    <Description>Win RM MaxMemoryPerShellMB</Description>
+                    <Order>4</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/service @{AllowUnencrypted="true"}</CommandLine>
+                    <Description>Win RM AllowUnencrypted</Description>
+                    <Order>5</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/service/auth @{Basic="true"}</CommandLine>
+                    <Description>Win RM auth Basic</Description>
+                    <Order>6</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c winrm set winrm/config/listener?Address=*+Transport=HTTP @{Port="5985"} </CommandLine>
+                    <Description>Win RM listener Address/Port</Description>
+                    <Order>7</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c netsh advfirewall firewall set rule group="remote administration" new enable=yes </CommandLine>
+                    <Description>Win RM adv firewall enable</Description>
+                    <Order>8</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: There is a better form of this command, I think it's: -->
+                <!-- netsh advfirewall firewall add rule name="Port 5985" dir=in action=allow protocol=TCP localport=5985 -->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c netsh firewall add portopening TCP 5985 "Port 5985" </CommandLine>
+                    <Description>Win RM port open</Description>
+                    <Order>9</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c net stop winrm </CommandLine>
+                    <Description>Stop Win RM Service </Description>
+                    <Order>10</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c sc config winrm start= auto</CommandLine>
+                    <Description>Win RM Autostart</Description>
+                    <Order>11</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c net start winrm </CommandLine>
+                    <Description>Start Win RM Service</Description>
+                    <Order>12</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Bad description -->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
+                    <Description>Start Win RM Service</Description>
+                    <Order>13</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Shutdown Event Tracker: ShutdownReasonOn-->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" /v ShutdownReasonOn /t REG_DWORD /d "0" /f</CommandLine>
+                    <Description>Shutdown Event Tracker ShutdownReasonOn</Description>
+                    <Order>14</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Shutdown Event Tracker: ShutdownReasonUI-->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" /v ShutdownReasonUI /t REG_DWORD /d "0" /f</CommandLine>
+                    <Description>Shutdown Event Tracker ShutdownReasonUI</Description>
+                    <Order>15</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Turn off LUA/UAC  -->
+                <!-- Won't work from offlineServicing/"Microsoft-Windows-LUA-Settings -->
+                <SynchronousCommand wcm:action="add">
+                    <Order>16</Order>
+                    <Path>cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f</Path>
+                    <Description>Disable EnableLUA</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>17</Order>
+                    <Path>cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 0 /f</Path>
+                    <Description>ConsentPromptBehaviorAdmin</Description>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+            <ShowWindowsLive>false</ShowWindowsLive>
+        </component>
+    </settings>
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <OEMInformation>
+                <HelpCustomized>false</HelpCustomized>
+            </OEMInformation>
+            <!-- Rename computer here. -->
+            <ComputerName>vagrant-2008R2</ComputerName>
+            <!-- DL: Timezone Here -->
+            <TimeZone>Eastern Standard Time</TimeZone>
+            <RegisteredOwner></RegisteredOwner>
+        </component>
+        <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SkipAutoActivation>true</SkipAutoActivation>
+        </component>
+        <!-- DL: Disable opening of Server Manager at Logon. -->
+        <component name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DoNotOpenServerManagerAtLogon>true
+            </DoNotOpenServerManagerAtLogon>
+        </component>
+        <!-- DL: Disable Initial Configuration Tasks at Logon -->
+        <!-- Note: deprecated in server 2012 -->
+        <component name="Microsoft-Windows-OutOfBoxExperience" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" 
+            language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DoNotOpenInitialConfigurationTasksAtLogon>true
+            </DoNotOpenInitialConfigurationTasksAtLogon>
+        </component>
+        <!-- DL: Disable Internet Explorer Enhanced Security Configuration (ESC) -->
+        <component name="Microsoft-Windows-IE-ESC" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" 
+            language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <IEHardenAdmin>false</IEHardenAdmin>
+            <IEHardenUser>false</IEHardenUser>
+        </component>
+    </settings>
+    <cpi:offlineImage cpi:source="catalog:d:/sources/install_windows server 2008 r2 serverdatacenter.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+</unattend>

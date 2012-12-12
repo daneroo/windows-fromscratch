@@ -1,7 +1,10 @@
 REM Install SQLExpress (and .Net3.5 )
 
-REM Install .Net (not sure this is actually required)
-dism /online /enable-feature /FeatureName:NetFx3 /NoRestart
+REM Commented Install .Net (not sure this is actually required)
+REM dism /online /enable-feature /FeatureName:NetFx3 /NoRestart
+
+REM Fetch SQLEXPR_x64 (can also get the version w/Tools)
+REM http://download.microsoft.com/download/5/5/8/558522E0-2150-47E2-8F52-FF4D9C3645DF/SQLEXPRWT_x64_ENU.exe
 cscript %TEMP%\wget.vbs /url:http://care.dlservice.microsoft.com/dl/download/5/1/A/51A153F6-6B08-4F94-A7B2-BA1AD482BC75/SQLEXPR_x64_ENU.exe /path:%TEMP%\SQLEXPR_x64_ENU.exe
 
 REM We can't run the installer through winrm, but we can schedule a task to do it: tadaa
