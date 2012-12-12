@@ -181,10 +181,39 @@
                     <Order>12</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
+                <!-- DL: Bad description -->
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
                     <Description>Start Win RM Service</Description>
                     <Order>13</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Shutdown Event Tracker: ShutdownReasonOn-->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" /v ShutdownReasonOn /t REG_DWORD /d "0" /f</CommandLine>
+                    <Description>Shutdown Event Tracker ShutdownReasonOn</Description>
+                    <Order>14</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Shutdown Event Tracker: ShutdownReasonUI-->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c REG ADD "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" /v ShutdownReasonUI /t REG_DWORD /d "0" /f</CommandLine>
+                    <Description>Shutdown Event Tracker ShutdownReasonUI</Description>
+                    <Order>15</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <!-- DL: Turn off LUA/UAC  -->
+                <!-- same effect as offlineServicing/"Microsoft-Windows-LUA-Settings -->
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f</CommandLine>
+                    <Description>Disable EnableLUA</Description>
+                    <Order>16</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 0 /f</CommandLine>
+                    <Description>ConsentPromptBehaviorAdmin</Description>
+                    <Order>17</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>
