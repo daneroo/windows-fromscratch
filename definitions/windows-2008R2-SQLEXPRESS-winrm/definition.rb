@@ -24,7 +24,7 @@ Veewee::Session.declare({
     :postinstall_timeout => "20000",
     :postinstall_files => [
       "install-chef.bat",
-      "install-sqlexpress.bat",
+      # "install-sqlexpress.bat",
       "install-vbox.bat"
     ],
     :sudo_cmd => "%f",

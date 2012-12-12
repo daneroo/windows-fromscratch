@@ -1,16 +1,6 @@
 This basebox definition was modified to install SQLExpress
 * modify memory, cores
-* disable UAC (EnableLUA=false) -- in Autounattend.xml - not working ?
-
-    <!-- DL: Turn off LUA/UAC Still not working ?-->
-    <!-- 
-        <settings pass="offlineServicing">
-            <component name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                <EnableLUA>false</EnableLUA>
-            </component>
-        </settings>
-     -->
-
+* disable UAC (EnableLUA=false) -- in Autounattend.xml ?
 * disable lua/UAC with registry: 
 
     You can invoke this with:
