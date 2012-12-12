@@ -10,6 +10,7 @@ preseed_packages = [
     "7z920-x64.msi",
     "npp.6.2.2.Installer.exe",
     "GoogleChromeStandaloneEnterprise.msi",
+    "TableauPublicDesktop.msi",
     "SQLEXPR_x64_ENU.exe",
     "SQLEXPRWT_x64_ENU.exe",
     "Dominos-03-Aug-2012.7z",

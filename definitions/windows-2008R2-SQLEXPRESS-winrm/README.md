@@ -1,10 +1,15 @@
 This basebox definition was modified to install SQLExpress
 * modify memory, cores
 * disable UAC (EnableLUA=false) -- in Autounattend.xml - not working ?
-* disable lua with registry: 
+* disable lua/UAC with registry: 
 
     REG QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA
     REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d "0" /f
+
+Disable Explorer Enhanced Security
+
+    IEHardenAdmin = Off
+    IEHardenUser = Off
 
 * add feature NetFx3 (is that required ?) using dism in install-sqlexpress.bat
 
