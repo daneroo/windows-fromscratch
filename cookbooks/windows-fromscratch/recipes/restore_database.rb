@@ -18,6 +18,7 @@ end
 
 # wait a bit for mssql to be restarted, before restoring
 # http://www.howtogeek.com/50295/backup-your-sql-server-database-from-the-command-line/
+# http://msdn.microsoft.com/en-us/library/ms165702(v=sql.105).aspx
 windows_batch "restore snapshot" do
   code <<-EOH
   sleep 10
