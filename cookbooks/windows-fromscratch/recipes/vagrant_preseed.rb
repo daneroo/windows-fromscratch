@@ -14,7 +14,9 @@ preseed_packages = [
     "SQLEXPR_x64_ENU.exe",
     "SQLEXPRWT_x64_ENU.exe",
     "Dominos-03-Aug-2012.7z",
-    "SAS-Setup.20121017.exe"
+    "solochain-03-Aug-2012.bak",
+    "SAS-Setup.20121017.exe",
+    "sas.20121017.zip"
 ];
 
 ruby_block 'preseed cache section' do
